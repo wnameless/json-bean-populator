@@ -1,0 +1,8 @@
+{
+    "string": "Hello",
+    "numbers": {
+        "whole": [123, 1234567890],
+        "fraction": [12.34, 123.456]
+    },
+    "boolean": true
+}
