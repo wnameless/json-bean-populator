@@ -68,7 +68,8 @@ populated-data.json:
 Result:
 ```java
 TestBean tb = new TestBean();
-tb.setPopulatedJson("populated-data.json"); // populated-data.json is defined on above lines
+String populatedData = "{...}"; // populated-data.json is defined on above lines
+tb.setPopulatedJson(populatedData); 
 
 Sytem.out.println(tb.getStr());     // Hello
 Sytem.out.println(tb.getI());       // 123
