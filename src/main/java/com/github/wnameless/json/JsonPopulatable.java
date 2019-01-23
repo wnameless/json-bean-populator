@@ -16,7 +16,6 @@
 package com.github.wnameless.json;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import com.eclipsesource.json.Json;
@@ -24,6 +23,13 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import com.github.wnameless.json.flattener.JsonFlattener;
 
+/**
+ * 
+ * {@link JsonPopulatable}
+ * 
+ * @author wmw
+ *
+ */
 public interface JsonPopulatable {
 
   default void setPopulatedData(String json) {
@@ -39,10 +45,9 @@ public interface JsonPopulatable {
         String keyName = anno.value();
         if (keys.contains(keyName)) {
           JsonValue val = jo.get(keyName);
-          Type type = f.getType();
+          Class<?> type = f.getType();
           f.setAccessible(true);
-          if (val.isString()
-              && type.getClass().isAssignableFrom(String.class.getClass())) {
+          if (val.isString() && type.isAssignableFrom(String.class)) {
             try {
               f.set(this, val.asString());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
