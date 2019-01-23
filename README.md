@@ -14,6 +14,7 @@ Populate Java beans by annotations and given JSON data.
 ```
 
 ## Purpose & Quick Start
+The json-bean-populator is not an Java Object serializer or deserializer. It only focuses on populating Java object fields by complex and nested JSON data. 
 ```java
 public class TestBean implements JsonPopulatable {
 
