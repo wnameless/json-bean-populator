@@ -20,6 +20,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 
+ * Because {@link JsonPopulatedKey} can NOT fulfill all the needs of Java bean
+ * data populating, {@link JsonPopulatedValue} is introduced to solve this
+ * problem. {@link JsonPopulatedValue} allows user to provide a
+ * {@link JsonPopulatedValueCustomizer} which can process any input JSON data
+ * and produce a final result used to set on the annotated field.
+ * 
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonPopulatedValue {

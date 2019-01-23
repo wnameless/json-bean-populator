@@ -15,6 +15,12 @@
  */
 package com.github.wnameless.json;
 
+/**
+ * 
+ * {@link JsonPopulatedValueCustomizer} transforms the given JSON to any Java
+ * Object. It is designed to work with {@link JsonPopulatedValue}.
+ *
+ */
 public interface JsonPopulatedValueCustomizer {
 
   Object toValue(String json);

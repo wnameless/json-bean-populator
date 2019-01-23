@@ -25,14 +25,20 @@ import com.github.wnameless.json.flattener.JsonFlattener;
 
 /**
  * 
- * {@link JsonPopulatable}
+ * {@link JsonPopulatable} defines a interface with a default
+ * {@link #setPopulatedJson} method which allows
  * 
- * @author wmw
- *
  */
 public interface JsonPopulatable {
 
-  default void setPopulatedData(String json) {
+  /**
+   * Populates the Java bean which implements the {@link JsonPopulatable}
+   * interface with given JSON string.
+   * 
+   * @param json
+   *          used to populate the Java bean
+   */
+  default void setPopulatedJson(String json) {
     String flattenedJson = JsonFlattener.flatten(json);
     JsonValue jv = Json.parse(flattenedJson);
     JsonObject jo = jv.asObject();

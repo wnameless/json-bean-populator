@@ -25,7 +25,7 @@ public class JsonBeanPopulaterTest {
 
   @Test
   public void testPopulate() {
-    tb.setPopulatedData(json);
+    tb.setPopulatedJson(json);
 
     assertEquals("Hello", tb.getStr());
     assertEquals(null, tb.getNoStr());
