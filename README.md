@@ -7,9 +7,9 @@ Populate Java beans by annotations and given JSON data.
 ## Maven Repo
 ```xml
 <dependency>
-	<groupId>com.github.wnameless</groupId>
+	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-bean-populator</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 </dependency>
 ```
 
