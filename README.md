@@ -12,6 +12,7 @@ Populate Java beans by annotations and given JSON data.
 	<version>0.2.0</version>
 </dependency>
 ```
+Since v0.2.0, [JsonValueBase](https://github.com/wnameless/json-base) is accepted in JsonPopulatable.
 
 ## Purpose & Quick Start
 This json-bean-populator is not an Java object serializer or deserializer.<br>
