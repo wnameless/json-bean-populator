@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/json-bean-populator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/json-bean-populator)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-bean-populator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless.json/json-bean-populator)
 
 json-bean-populator
 =============
