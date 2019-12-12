@@ -39,82 +39,8 @@ public interface JsonPopulatable {
    *          used to populate the Java bean
    */
   default void setPopulatedJson(String json) {
-    String flattenedJson = JsonFlattener.flatten(json);
-    JsonValue jv = Json.parse(flattenedJson);
-    JsonObject jo = jv.asObject();
-    List<String> keys = jo.names();
-
-    Class<?> klass = this.getClass();
-    for (Field f : klass.getDeclaredFields()) {
-      if (f.isAnnotationPresent(JsonPopulatedKey.class)) {
-        JsonPopulatedKey anno = f.getAnnotation(JsonPopulatedKey.class);
-        String keyName = anno.value();
-        if (keys.contains(keyName)) {
-          JsonValue val = jo.get(keyName);
-          Class<?> type = f.getType();
-          f.setAccessible(true);
-          if (val.isString() && type.isAssignableFrom(String.class)) {
-            try {
-              f.set(this, val.asString());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Integer.class)) {
-            try {
-              f.set(this, val.asInt());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(int.class)) {
-            try {
-              f.set(this, val.asInt());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Long.class)) {
-            try {
-              f.set(this, val.asLong());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(long.class)) {
-            try {
-              f.set(this, val.asLong());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Float.class)) {
-            try {
-              f.set(this, val.asFloat());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(float.class)) {
-            try {
-              f.set(this, val.asFloat());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Double.class)) {
-            try {
-              f.set(this, val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(double.class)) {
-            try {
-              f.set(this, val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isBoolean() && type.equals(Boolean.class)) {
-            try {
-              f.set(this, val.asBoolean());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isBoolean() && type.equals(boolean.class)) {
-            try {
-              f.set(this, val.asBoolean());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          }
-        }
-      } else if (f.isAnnotationPresent(JsonPopulatedValue.class)) {
-        JsonPopulatedValue jpv = f.getAnnotation(JsonPopulatedValue.class);
-        JsonPopulatedValueCustomizer jpvc;
-        try {
-          jpvc = jpv.value().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-          throw new RuntimeException(e);
-        }
-        try {
-          f.setAccessible(true);
-          f.set(this, jpvc.toValue(json));
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-          throw new RuntimeException(e);
-        }
-      }
-    }
+    MinimalJsonValue jsonVal = new MinimalJsonValue(Json.parse(json));
+    setPopulatedJson(jsonVal);
   }
 
   /**
@@ -196,6 +122,23 @@ public interface JsonPopulatable {
         try {
           f.setAccessible(true);
           f.set(this, jpvc.toValue(jsonVal.toString()));
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+          throw new RuntimeException(e);
+        }
+      } else if (f.isAnnotationPresent(JsonPopulatedValueWithKeys.class)) {
+        JsonPopulatedValueWithKeys jpvwk =
+            f.getAnnotation(JsonPopulatedValueWithKeys.class);
+        JsonPopulatedValueWithKeysCustomizer jpvwkc;
+        String[] jsonKeys;
+        try {
+          jpvwkc = jpvwk.customizer().newInstance();
+          jsonKeys = jpvwk.keys();
+        } catch (InstantiationException | IllegalAccessException e) {
+          throw new RuntimeException(e);
+        }
+        try {
+          f.setAccessible(true);
+          f.set(this, jpvwkc.toValue(jsonVal.toString(), jsonKeys));
         } catch (IllegalArgumentException | IllegalAccessException e) {
           throw new RuntimeException(e);
         }

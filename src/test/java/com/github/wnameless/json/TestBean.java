@@ -80,4 +80,9 @@ public class TestBean implements JsonPopulatable {
   @JsonPopulatedValue(ProductJsonPopulatedValue.class)
   long product;
 
+  @JsonPopulatedValueWithKeys(
+      customizer = ProductJsonPopulatedValueWithKeys.class,
+      keys = { "whole", "fraction" })
+  double product2;
+
 }
