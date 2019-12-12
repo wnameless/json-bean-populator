@@ -9,7 +9,7 @@ Populate Java beans by annotations and given JSON data.
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-bean-populator</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 </dependency>
 ```
 Since v0.2.0, [JsonValueBase](https://github.com/wnameless/json-base) is accepted in JsonPopulatable.
@@ -35,6 +35,11 @@ public class TestBean implements JsonPopulatable {
   @JsonPopulatedValue(ProductJsonPopulatedValue.class)
   long product;
 
+  @JsonPopulatedValueWithKeys(
+      customizer = ProductJsonPopulatedValueWithKeys.class,
+      keys = { "whole", "fraction" })
+  double product2;
+
   \\ Getters and Setters
   \\ ...
 }
@@ -51,6 +56,23 @@ public class ProductJsonPopulatedValue implements JsonPopulatedValueCustomizer {
         .asLong()
         * js.asObject().get("numbers").asObject().get("whole").asArray().get(1)
             .asLong();
+  }
+
+}
+```
+
+Class ProductJsonPopulatedValueWithKeys
+```java
+public class ProductJsonPopulatedValueWithKeys
+    implements JsonPopulatedValueWithKeysCustomizer {
+
+  @Override
+  public Object toValue(String json, String[] keys) {
+    JsonValue js = Json.parse(json);
+    return js.asObject().get("numbers").asObject().get(keys[0]).asArray().get(0)
+        .asLong()
+        * js.asObject().get("numbers").asObject().get(keys[1]).asArray().get(1)
+            .asDouble();
   }
 
 }
@@ -74,9 +96,10 @@ TestBean tb = new TestBean();
 String populatedData = "{...}"; // populated-data.json is defined on above lines
 tb.setPopulatedJson(populatedData); 
 
-Sytem.out.println(tb.getStr());     // Hello
-Sytem.out.println(tb.getI());       // 123
-Sytem.out.println(tb.getD());       // 123.456
-Sytem.out.println(tb.getB());       // true
-Sytem.out.println(tb.getProduct()); // 151851850470
+Sytem.out.println(tb.getStr());      // Hello
+Sytem.out.println(tb.getI());        // 123
+Sytem.out.println(tb.getD());        // 123.456
+Sytem.out.println(tb.getB());        // true
+Sytem.out.println(tb.getProduct());  // 151851850470
+Sytem.out.println(tb.getProduct2()); // 15185.088
 ```
