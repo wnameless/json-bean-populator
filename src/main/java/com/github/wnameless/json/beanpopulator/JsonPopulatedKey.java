@@ -13,7 +13,7 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

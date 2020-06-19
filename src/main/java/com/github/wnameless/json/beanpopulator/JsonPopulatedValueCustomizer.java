@@ -13,21 +13,16 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
 
-import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonValue;
+/**
+ * 
+ * {@link JsonPopulatedValueCustomizer} transforms the given JSON to any Java
+ * Object. It is designed to work with {@link JsonPopulatedValue}.
+ *
+ */
+public interface JsonPopulatedValueCustomizer {
 
-public class ProductJsonPopulatedValueWithKeys
-    implements JsonPopulatedValueWithKeysCustomizer {
-
-  @Override
-  public Object toValue(String json, String[] keys) {
-    JsonValue js = Json.parse(json);
-    return js.asObject().get("numbers").asObject().get(keys[0]).asArray().get(0)
-        .asLong()
-        * js.asObject().get("numbers").asObject().get(keys[1]).asArray().get(1)
-            .asDouble();
-  }
+  Object toValue(String json);
 
 }

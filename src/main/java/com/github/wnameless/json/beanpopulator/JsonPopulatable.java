@@ -13,14 +13,18 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.eclipsesource.json.Json;
-import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.wnameless.json.base.JacksonJsonValue;
+import com.github.wnameless.json.base.JsonValueBase;
 import com.github.wnameless.json.flattener.JsonFlattener;
 
 /**
@@ -39,8 +43,14 @@ public interface JsonPopulatable {
    *          used to populate the Java bean
    */
   default void setPopulatedJson(String json) {
-    MinimalJsonValue jsonVal = new MinimalJsonValue(Json.parse(json));
-    setPopulatedJson(jsonVal);
+    ObjectMapper mapper = new ObjectMapper();
+    JacksonJsonValue jsonVal;
+    try {
+      jsonVal = new JacksonJsonValue(mapper.readTree(json));
+      setPopulatedJson(jsonVal);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -52,9 +62,14 @@ public interface JsonPopulatable {
    */
   default void setPopulatedJson(JsonValueBase<?> jsonVal) {
     String flattenedJson = JsonFlattener.flatten(jsonVal);
-    JsonValue jv = Json.parse(flattenedJson);
-    JsonObject jo = jv.asObject();
-    List<String> keys = jo.names();
+    ObjectNode jo;
+    try {
+      jo = (ObjectNode) new ObjectMapper().readTree(flattenedJson);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    List<String> keys = new ArrayList<>();
+    jo.fieldNames().forEachRemaining(key -> keys.add(key));
 
     Class<?> klass = this.getClass();
     for (Field f : klass.getDeclaredFields()) {
@@ -62,42 +77,42 @@ public interface JsonPopulatable {
         JsonPopulatedKey anno = f.getAnnotation(JsonPopulatedKey.class);
         String keyName = anno.value();
         if (keys.contains(keyName)) {
-          JsonValue val = jo.get(keyName);
+          JsonNode val = jo.get(keyName);
           Class<?> type = f.getType();
           f.setAccessible(true);
-          if (val.isString() && type.isAssignableFrom(String.class)) {
+          if (val.isTextual() && type.isAssignableFrom(String.class)) {
             try {
-              f.set(this, val.asString());
+              f.set(this, val.asText());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Integer.class)) {
-            try {
-              f.set(this, val.asInt());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(int.class)) {
+          } else if (val.isIntegralNumber() && type.equals(Integer.class)) {
             try {
               f.set(this, val.asInt());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Long.class)) {
+          } else if (val.isIntegralNumber() && type.equals(int.class)) {
+            try {
+              f.set(this, val.asInt());
+            } catch (IllegalArgumentException | IllegalAccessException e) {}
+          } else if (val.isIntegralNumber() && type.equals(Long.class)) {
             try {
               f.set(this, val.asLong());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(long.class)) {
+          } else if (val.isIntegralNumber() && type.equals(long.class)) {
             try {
               f.set(this, val.asLong());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Float.class)) {
+          } else if (val.isFloatingPointNumber() && type.equals(Float.class)) {
             try {
-              f.set(this, val.asFloat());
+              f.set(this, (float) val.asDouble());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(float.class)) {
+          } else if (val.isFloatingPointNumber() && type.equals(float.class)) {
             try {
-              f.set(this, val.asFloat());
+              f.set(this, (float) val.asDouble());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(Double.class)) {
+          } else if (val.isFloatingPointNumber() && type.equals(Double.class)) {
             try {
               f.set(this, val.asDouble());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isNumber() && type.equals(double.class)) {
+          } else if (val.isFloatingPointNumber() && type.equals(double.class)) {
             try {
               f.set(this, val.asDouble());
             } catch (IllegalArgumentException | IllegalAccessException e) {}

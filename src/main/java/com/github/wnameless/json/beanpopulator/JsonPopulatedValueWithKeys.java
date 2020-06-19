@@ -13,7 +13,7 @@
  * the License.
  *
  */
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,17 +22,20 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Because {@link JsonPopulatedKey} can NOT fulfill all the needs of Java bean
- * data populating, {@link JsonPopulatedValue} is introduced to solve this
- * problem. {@link JsonPopulatedValue} allows user to provide a
- * {@link JsonPopulatedValueCustomizer} which can process any input JSON data
- * and produce a final result used to set on the annotated field.
+ * Because {@link JsonPopulatedValue} can NOT fulfill all the needs of Java bean
+ * data populating, {@link JsonPopulatedValueWithKeys} is introduced to solve
+ * this problem. {@link JsonPopulatedValueWithKeys} allows user to provide a
+ * {@link JsonPopulatedValueWithKeysCustomizer} which can process any input JSON
+ * data with specified JSON keys and produce a final result used to set on the
+ * annotated field.
  * 
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JsonPopulatedValue {
+public @interface JsonPopulatedValueWithKeys {
 
-  Class<? extends JsonPopulatedValueCustomizer> value();
+  Class<? extends JsonPopulatedValueWithKeysCustomizer> customizer();
+
+  String[] keys();
 
 }

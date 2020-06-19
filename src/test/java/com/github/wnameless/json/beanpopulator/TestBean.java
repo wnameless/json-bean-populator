@@ -1,4 +1,9 @@
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
+
+import com.github.wnameless.json.beanpopulator.JsonPopulatable;
+import com.github.wnameless.json.beanpopulator.JsonPopulatedKey;
+import com.github.wnameless.json.beanpopulator.JsonPopulatedValue;
+import com.github.wnameless.json.beanpopulator.JsonPopulatedValueWithKeys;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.github.wnameless.json;
+package com.github.wnameless.json.beanpopulator;
 
 import static org.junit.Assert.assertEquals;
 
