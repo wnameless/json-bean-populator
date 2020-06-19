@@ -3,7 +3,6 @@ package com.github.wnameless.json.beanpopulator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,8 @@ public class JsonBeanPopulaterTest {
   @BeforeEach
   public void before() throws IOException {
     tb = new TestBean();
-    URL url = Resources.getResource("populated-data.json");
-    json = Resources.toString(url, Charsets.UTF_8);
+    json = Resources.toString(Resources.getResource("populated-data.json"),
+        Charsets.UTF_8);
   }
 
   @Test
