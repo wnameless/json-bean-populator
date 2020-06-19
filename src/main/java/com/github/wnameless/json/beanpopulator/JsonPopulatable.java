@@ -16,6 +16,7 @@
 package com.github.wnameless.json.beanpopulator;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,8 +131,10 @@ public interface JsonPopulatable {
         JsonPopulatedValue jpv = f.getAnnotation(JsonPopulatedValue.class);
         JsonPopulatedValueCustomizer jpvc;
         try {
-          jpvc = jpv.value().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+          jpvc = jpv.value().getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException
+            | IllegalArgumentException | InvocationTargetException
+            | NoSuchMethodException | SecurityException e) {
           throw new RuntimeException(e);
         }
         try {
@@ -146,9 +149,11 @@ public interface JsonPopulatable {
         JsonPopulatedValueWithKeysCustomizer jpvwkc;
         String[] jsonKeys;
         try {
-          jpvwkc = jpvwk.customizer().newInstance();
+          jpvwkc = jpvwk.customizer().getConstructor().newInstance();
           jsonKeys = jpvwk.keys();
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException
+            | IllegalArgumentException | InvocationTargetException
+            | NoSuchMethodException | SecurityException e) {
           throw new RuntimeException(e);
         }
         try {

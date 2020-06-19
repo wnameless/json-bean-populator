@@ -1,12 +1,12 @@
 package com.github.wnameless.json.beanpopulator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.net.URL;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -16,7 +16,7 @@ public class JsonBeanPopulaterTest {
   TestBean tb;
   String json;
 
-  @Before
+  @BeforeEach
   public void before() throws IOException {
     tb = new TestBean();
     URL url = Resources.getResource("populated-data.json");
