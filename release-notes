@@ -9,3 +9,7 @@ v0.3.0
 
 v0.4.0
 + Java Module supported
+
+v0.4.0
++ Support BigInteger & BigDecimal
++ Auto convert integer to floating type

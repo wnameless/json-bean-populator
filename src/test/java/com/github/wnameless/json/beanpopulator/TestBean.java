@@ -1,5 +1,8 @@
 package com.github.wnameless.json.beanpopulator;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public class TestBean implements JsonPopulatable {
 
   @JsonPopulatedKey("string")
@@ -38,6 +41,27 @@ public class TestBean implements JsonPopulatable {
   @JsonPopulatedKey("numbers.fraction[1]")
   long noPl;
 
+  @JsonPopulatedKey("numbers.whole[1]")
+  BigInteger bi;
+
+  @JsonPopulatedKey("numbers.whole[1]")
+  Float i2F;
+
+  @JsonPopulatedKey("numbers.whole[1]")
+  float i2f;
+
+  @JsonPopulatedKey("numbers.whole[1]")
+  Double i2D;
+
+  @JsonPopulatedKey("numbers.whole[1]")
+  double i2d;
+
+  @JsonPopulatedKey("numbers.whole[1]")
+  BigDecimal i2BD;
+
+  @JsonPopulatedKey("numbers.fraction[1]")
+  BigInteger noBi;
+
   @JsonPopulatedKey("numbers.fraction[0]")
   Float f;
 
@@ -61,6 +85,9 @@ public class TestBean implements JsonPopulatable {
 
   @JsonPopulatedKey("string")
   double noPd;
+
+  @JsonPopulatedKey("numbers.fraction[1]")
+  BigDecimal bd;
 
   @JsonPopulatedKey("boolean")
   Boolean b;
@@ -178,6 +205,62 @@ public class TestBean implements JsonPopulatable {
     this.noPl = noPl;
   }
 
+  public BigInteger getBi() {
+    return bi;
+  }
+
+  public void setBi(BigInteger bi) {
+    this.bi = bi;
+  }
+
+  public Float getI2F() {
+    return i2F;
+  }
+
+  public void setI2F(Float i2f) {
+    i2F = i2f;
+  }
+
+  public float getI2f() {
+    return i2f;
+  }
+
+  public void setI2f(float i2f) {
+    this.i2f = i2f;
+  }
+
+  public Double getI2D() {
+    return i2D;
+  }
+
+  public void setI2D(Double i2d) {
+    i2D = i2d;
+  }
+
+  public double getI2d() {
+    return i2d;
+  }
+
+  public void setI2d(double i2d) {
+    this.i2d = i2d;
+  }
+
+  public BigDecimal getI2BD() {
+    return i2BD;
+  }
+
+  public void setI2BD(BigDecimal i2bd) {
+    i2BD = i2bd;
+  }
+
+  public BigInteger getNoBi() {
+    return noBi;
+  }
+
+  public void setNoBi(BigInteger noBi) {
+    this.noBi = noBi;
+  }
+
   public Float getF() {
     return f;
   }
@@ -240,6 +323,14 @@ public class TestBean implements JsonPopulatable {
 
   public void setNoPd(double noPd) {
     this.noPd = noPd;
+  }
+
+  public BigDecimal getBd() {
+    return bd;
+  }
+
+  public void setBd(BigDecimal bd) {
+    this.bd = bd;
   }
 
   public Boolean getB() {

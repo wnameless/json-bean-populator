@@ -17,6 +17,8 @@ package com.github.wnameless.json.beanpopulator;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,52 +83,96 @@ public interface JsonPopulatable {
           JsonNode val = jo.get(keyName);
           Class<?> type = f.getType();
           f.setAccessible(true);
+          // Text
           if (val.isTextual() && type.isAssignableFrom(String.class)) {
             try {
               f.set(this, val.asText());
             } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isIntegralNumber() && type.equals(Integer.class)) {
-            try {
-              f.set(this, val.asInt());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isIntegralNumber() && type.equals(int.class)) {
-            try {
-              f.set(this, val.asInt());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isIntegralNumber() && type.equals(Long.class)) {
-            try {
-              f.set(this, val.asLong());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isIntegralNumber() && type.equals(long.class)) {
-            try {
-              f.set(this, val.asLong());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isFloatingPointNumber() && type.equals(Float.class)) {
-            try {
-              f.set(this, (float) val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isFloatingPointNumber() && type.equals(float.class)) {
-            try {
-              f.set(this, (float) val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isFloatingPointNumber() && type.equals(Double.class)) {
-            try {
-              f.set(this, val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isFloatingPointNumber() && type.equals(double.class)) {
-            try {
-              f.set(this, val.asDouble());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isBoolean() && type.equals(Boolean.class)) {
-            try {
-              f.set(this, val.asBoolean());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
-          } else if (val.isBoolean() && type.equals(boolean.class)) {
-            try {
-              f.set(this, val.asBoolean());
-            } catch (IllegalArgumentException | IllegalAccessException e) {}
+            // Number
+          } else if (val.isNumber()) {
+            // Integer
+            if (val.isIntegralNumber()) {
+              if (type.equals(Integer.class)) {
+                try {
+                  f.set(this, val.asInt());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(int.class)) {
+                try {
+                  f.set(this, val.asInt());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(Long.class)) {
+                try {
+                  f.set(this, val.asLong());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(long.class)) {
+                try {
+                  f.set(this, val.asLong());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(BigInteger.class)) {
+                try {
+                  f.set(this, new BigInteger(val.asText()));
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              }
+              // Integer to Floating
+              else if (type.equals(Float.class)) {
+                try {
+                  f.set(this, (float) val.asInt());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(float.class)) {
+                try {
+                  f.set(this, (float) val.asInt());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(Double.class)) {
+                try {
+                  f.set(this, (double) val.asLong());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(double.class)) {
+                try {
+                  f.set(this, (double) val.asLong());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(BigDecimal.class)) {
+                try {
+                  f.set(this, new BigDecimal(val.asText()));
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              }
+              // Floating
+            } else if (val.isFloatingPointNumber()) {
+              if (type.equals(Float.class)) {
+                try {
+                  f.set(this, (float) val.asDouble());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(float.class)) {
+                try {
+                  f.set(this, (float) val.asDouble());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(Double.class)) {
+                try {
+                  f.set(this, val.asDouble());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(double.class)) {
+                try {
+                  f.set(this, val.asDouble());
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              } else if (type.equals(BigDecimal.class)) {
+                try {
+                  f.set(this, new BigDecimal(val.asText()));
+                } catch (IllegalArgumentException | IllegalAccessException e) {}
+              }
+            }
+            // Boolean
+          } else if (val.isBoolean()) {
+            if (type.equals(Boolean.class)) {
+              try {
+                f.set(this, val.asBoolean());
+              } catch (IllegalArgumentException | IllegalAccessException e) {}
+            } else if (type.equals(boolean.class)) {
+              try {
+                f.set(this, val.asBoolean());
+              } catch (IllegalArgumentException | IllegalAccessException e) {}
+            }
           }
         }
+        // Custom
       } else if (f.isAnnotationPresent(JsonPopulatedValue.class)) {
         JsonPopulatedValue jpv = f.getAnnotation(JsonPopulatedValue.class);
         JsonPopulatedValueCustomizer jpvc;

@@ -3,6 +3,8 @@ package com.github.wnameless.json.beanpopulator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,8 +46,21 @@ public class JsonBeanPopulaterTest {
     assertEquals(1234567890L, tb.getPl());
     assertEquals(0L, tb.getNoPl());
 
+    assertEquals(BigInteger.valueOf(1234567890L), tb.getBi());
+    assertEquals(null, tb.getNoBi());
+
     assertEquals(Float.valueOf(12.34f), tb.getF());
     assertEquals(null, tb.getNoF());
+
+    assertEquals(Float.valueOf(1234567890), tb.getI2F());
+
+    assertEquals(1234567890f, tb.getI2f());
+
+    assertEquals(Double.valueOf(1234567890), tb.getI2D());
+
+    assertEquals(1234567890d, tb.getI2d());
+
+    assertEquals(BigDecimal.valueOf(1234567890), tb.getI2BD());
 
     assertEquals(12.34f, tb.getPf(), 0);
     assertEquals(0f, tb.getNoPf(), 0);
@@ -55,6 +70,8 @@ public class JsonBeanPopulaterTest {
 
     assertEquals(123.456, tb.getPd(), 0);
     assertEquals(0.0, tb.getNoPd(), 0);
+
+    assertEquals(BigDecimal.valueOf(123.456), tb.getBd());
 
     assertEquals(true, tb.getB());
     assertEquals(null, tb.getNoB());
