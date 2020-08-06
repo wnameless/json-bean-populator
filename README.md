@@ -9,11 +9,12 @@ Populate Java beans by annotations and given JSON data.
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-bean-populator</artifactId>
-	<version>0.4.0</version>
+	<version>0.5.0</version>
 </dependency>
 ```
 Since v0.2.0, [JsonValueBase](https://github.com/wnameless/json-base) is accepted in JsonPopulatable.<br>
-Since v0.4.0, Java Module supported and Package name is changed to com.github.wnameless.json.beanpopulator.
+Since v0.4.0, Java Module supported and Package name is changed to com.github.wnameless.json.beanpopulator.<br>
+Since v0.5.0, BigInteger & BigDecimal are supported.
 
 ## Purpose & Quick Start
 This json-bean-populator is not an Java object serializer or deserializer.<br>
