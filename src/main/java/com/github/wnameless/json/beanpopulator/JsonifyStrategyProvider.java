@@ -17,6 +17,12 @@ package com.github.wnameless.json.beanpopulator;
 
 import java.lang.reflect.Field;
 
+/**
+ * 
+ * {@link JsonifyStrategyProvider} transforms the given bean Field to a JSON
+ * string. It is designed to work with {@link JsonifyStrategy}.
+ *
+ */
 public interface JsonifyStrategyProvider {
 
   String toJson(Field field, Object bean);

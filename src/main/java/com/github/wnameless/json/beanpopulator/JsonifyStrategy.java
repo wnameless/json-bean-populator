@@ -20,6 +20,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 
+ * {@link JsonifyStrategy} can annotate on fields of any class which implements
+ * {@link JsonPopulatable}. The annotated field will be turn into a JSON string
+ * by the {@link JsonifyStrategyProvider} whenever
+ * {@link JsonPopulatable#beanToJson} is called.<br>
+ * <br>
+ * If the keyName is provided, it will be used as the JSON key in
+ * {@link JsonPopulatable#beanToJson} otherwise the bean Field name will be used
+ * instead.
+ * 
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonifyStrategy {

@@ -213,6 +213,12 @@ public interface JsonPopulatable {
     }
   }
 
+  /**
+   * Converts this Java bean to a JSON string. Only fields annotated with
+   * {@link JsonPopulatedKey} or {@link JsonifyStrategy } will be converted.
+   * 
+   * @return a JSON string
+   */
   default String beanToJson() {
     ObjectMapper mapper = new ObjectMapper();
     ObjectNode obj = mapper.createObjectNode();
