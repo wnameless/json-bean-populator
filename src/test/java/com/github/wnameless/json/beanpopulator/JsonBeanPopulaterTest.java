@@ -1,6 +1,7 @@
 package com.github.wnameless.json.beanpopulator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,19 +10,28 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 public class JsonBeanPopulaterTest {
 
   TestBean tb;
+  TestBeanForDefaultKeyName tb2;
   String json;
+  String jsonForDefaultKeys;
 
   @BeforeEach
   public void before() throws IOException {
     tb = new TestBean();
+    tb2 = new TestBeanForDefaultKeyName();
     json = Resources.toString(Resources.getResource("populated-data.json"),
         Charsets.UTF_8);
+    jsonForDefaultKeys = Resources.toString(
+        Resources.getResource("data-with-default-keys.json"), Charsets.UTF_8);
   }
 
   @Test
@@ -81,6 +91,44 @@ public class JsonBeanPopulaterTest {
 
     assertEquals(151851850470L, tb.getProduct());
     assertEquals(15185.088, tb.getProduct2(), 0);
+  }
+
+  @Test
+  public void testPopulate2() {
+    tb2.setPopulatedJson(jsonForDefaultKeys);
+
+    assertEquals("abc", tb2.getStr());
+    assertEquals(true, tb2.isBoolPri());
+    assertEquals(Boolean.FALSE, tb2.getBoolObj());
+    assertNull(tb2.getBoolNull());
+    assertEquals(1, tb2.getIntPri());
+    assertEquals(2, tb2.getIntObj());
+    assertNull(tb2.getIntNull());
+    assertEquals(3L, tb2.getLongPri());
+    assertEquals(4L, tb2.getLongObj());
+    assertNull(tb2.getLongNull());
+    assertEquals(new BigInteger("5"), tb2.getBigIntObj());
+    assertNull(tb2.getBigIntNull());
+    assertEquals(6.0f, tb2.getFloatPri());
+    assertEquals(7.0f, tb2.getFloatObj());
+    assertNull(tb2.getFloatNull());
+    assertEquals(8.0, tb2.getDoublePri());
+    assertEquals(9.0, tb2.getDoubleObj());
+    assertNull(tb2.getDoubleNull());
+    assertEquals(new BigDecimal("10.0"), tb2.getBigDecObj());
+    assertNull(tb2.getBigDecNull());
+  }
+
+  @Test
+  public void testBeanToJson()
+      throws JsonMappingException, JsonProcessingException {
+    ObjectMapper mapper = new ObjectMapper();
+    ObjectNode on = (ObjectNode) mapper.readTree(jsonForDefaultKeys);
+    on.set("date", mapper.valueToTree("2020-10-10"));
+    on.set("dateNil", mapper.valueToTree(null));
+    String exp = on.toString();
+    String act = mapper.readTree(new TestBeanToJson().beanToJson()).toString();
+    assertEquals(exp, act);
   }
 
 }

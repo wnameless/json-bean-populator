@@ -1,0 +1,22 @@
+{
+    "str": "abc",
+    "boolPri": true,
+    "boolObj": false,
+    "boolNull": null,
+    "intPri": 1,
+    "intObj": 2,
+    "intNull": null,
+    "longPri": 3,
+    "longObj": 4,
+    "longNull": null,
+    "bigIntObj": 5,
+    "bigIntNull": null,
+    "floatPri": 6.0,
+    "floatObj": 7.0,
+    "floatNull": null,
+    "doublePri": 8.0,
+    "doubleObj": 9.0,
+    "doubleNull": null,
+    "bigDecObj": 10.0,
+    "bigDecNull": null
+}

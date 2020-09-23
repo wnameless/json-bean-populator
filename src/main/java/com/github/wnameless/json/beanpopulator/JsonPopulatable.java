@@ -79,6 +79,7 @@ public interface JsonPopulatable {
       if (f.isAnnotationPresent(JsonPopulatedKey.class)) {
         JsonPopulatedKey anno = f.getAnnotation(JsonPopulatedKey.class);
         String keyName = anno.value();
+        if (keyName.isEmpty()) keyName = f.getName();
         if (keys.contains(keyName)) {
           JsonNode val = jo.get(keyName);
           Class<?> type = f.getType();
@@ -210,6 +211,49 @@ public interface JsonPopulatable {
         }
       }
     }
+  }
+
+  default String beanToJson() {
+    ObjectMapper mapper = new ObjectMapper();
+    ObjectNode obj = mapper.createObjectNode();
+
+    for (Field f : getClass().getDeclaredFields()) {
+      if (f.isAnnotationPresent(JsonPopulatedKey.class)) {
+        JsonPopulatedKey anno = f.getAnnotation(JsonPopulatedKey.class);
+        String keyName = anno.value();
+        if (keyName.isEmpty()) keyName = f.getName();
+
+        try {
+          f.setAccessible(true);
+          obj.set(keyName, mapper.valueToTree(f.get(this)));
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      // Custom
+      else if (f.isAnnotationPresent(JsonifyStrategy.class)) {
+        JsonifyStrategy js = f.getAnnotation(JsonifyStrategy.class);
+        String keyName = js.keyName();
+        if (keyName.isEmpty()) keyName = f.getName();
+
+        JsonifyStrategyProvider jsp;
+        try {
+          jsp = js.value().getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException
+            | IllegalArgumentException | InvocationTargetException
+            | NoSuchMethodException | SecurityException e) {
+          throw new RuntimeException(e);
+        }
+        try {
+          f.setAccessible(true);
+          obj.set(keyName, mapper.readTree(jsp.toJson(f, this)));
+        } catch (IllegalArgumentException | JsonProcessingException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }
+
+    return obj.toString();
   }
 
 }
