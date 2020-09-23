@@ -220,6 +220,18 @@ public interface JsonPopulatable {
    * @return a JSON string
    */
   default String beanToJson() {
+    return beanToJson(false);
+  }
+
+  /**
+   * Converts this Java bean to a JSON string. Only fields annotated with
+   * {@link JsonPopulatedKey} or {@link JsonifyStrategy } will be converted.
+   * 
+   * @param ignoreNull
+   *          if true null values will be ignored
+   * @return a JSON string
+   */
+  default String beanToJson(boolean ignoreNull) {
     ObjectMapper mapper = new ObjectMapper();
     ObjectNode obj = mapper.createObjectNode();
 
@@ -231,7 +243,10 @@ public interface JsonPopulatable {
 
         try {
           f.setAccessible(true);
-          obj.set(keyName, mapper.valueToTree(f.get(this)));
+          JsonNode jn = mapper.valueToTree(f.get(this));
+          if (!ignoreNull || !jn.isNull()) {
+            obj.set(keyName, jn);
+          }
         } catch (IllegalArgumentException | IllegalAccessException e) {
           throw new RuntimeException(e);
         }
@@ -252,7 +267,10 @@ public interface JsonPopulatable {
         }
         try {
           f.setAccessible(true);
-          obj.set(keyName, mapper.readTree(jsp.toJson(f, this)));
+          JsonNode jn = mapper.readTree(jsp.toJson(f, this));
+          if (!ignoreNull || !jn.isNull()) {
+            obj.set(keyName, jn);
+          }
         } catch (IllegalArgumentException | JsonProcessingException e) {
           throw new RuntimeException(e);
         }

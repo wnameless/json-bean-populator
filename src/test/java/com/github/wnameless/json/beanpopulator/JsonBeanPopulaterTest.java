@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Charsets;
@@ -129,6 +132,19 @@ public class JsonBeanPopulaterTest {
     String exp = on.toString();
     String act = mapper.readTree(new TestBeanToJson().beanToJson()).toString();
     assertEquals(exp, act);
+
+    Iterator<Entry<String, JsonNode>> iter = on.fields();
+    while (iter.hasNext()) {
+      Entry<String, JsonNode> f = iter.next();
+      if (f.getValue().isNull()) {
+        iter.remove();
+      }
+    }
+
+    String expIgnoreNull = on.toString();
+    String actIgnoreNull =
+        mapper.readTree(new TestBeanToJson().beanToJson(true)).toString();
+    assertEquals(expIgnoreNull, actIgnoreNull);
   }
 
 }

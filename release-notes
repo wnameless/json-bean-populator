@@ -17,3 +17,6 @@ v0.5.0
 v0.6.0
 + JsonPopulatedKey uses field name as default key name
 + Add #beanToJson to JsonPopulatable interface
+
+v0.6.1
++ Add ignore-null-values feature to JsonPopulatable#beanToJson
