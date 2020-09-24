@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-bean-populator</artifactId>
-	<version>0.6.2-SNAPSHOT</version>
+	<version>0.6.2</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -27,7 +27,7 @@
 		<connection>scm:git:git@github.com:wnameless/json-bean-populator.git</connection>
 		<developerConnection>scm:git:git@github.com:wnameless/json-bean-populator.git</developerConnection>
 		<url>git@github.com:wnameless/json-bean-populator.git</url>
-		<tag>HEAD</tag>
+		<tag>json-bean-populator-0.6.2</tag>
 	</scm>
 
 	<developers>
