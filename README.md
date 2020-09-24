@@ -9,7 +9,7 @@ Populate Java beans by annotations and given JSON data.
 <dependency>
 	<groupId>com.github.wnameless.json</groupId>
 	<artifactId>json-bean-populator</artifactId>
-	<version>0.6.1</version>
+	<version>0.6.2</version>
 </dependency>
 ```
 Since v0.2.0, [JsonValueBase](https://github.com/wnameless/json-base) is accepted in JsonPopulatable.<br>
@@ -38,6 +38,7 @@ public class TestBean implements JsonPopulatable {
   Boolean b;
 
   @JsonifyStrategy(value = ProductStrategy.class, keyName = "p")
+  // If no strategy is provided, a default strategy will be applied
   @JsonPopulatedValue(ProductJsonPopulatedValue.class)
   long product;
 
@@ -46,8 +47,8 @@ public class TestBean implements JsonPopulatable {
       keys = { "whole", "fraction" })
   double product2;
 
-  \\ Getters and Setters
-  \\ ...
+  // Getters and Setters
+  // ...
 }
 ```
 

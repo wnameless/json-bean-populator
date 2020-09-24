@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -129,6 +130,7 @@ public class JsonBeanPopulaterTest {
     ObjectNode on = (ObjectNode) mapper.readTree(jsonForDefaultKeys);
     on.set("date", mapper.valueToTree("2020-10-10"));
     on.set("dateNil", mapper.valueToTree(null));
+    on.set("list", mapper.valueToTree(Arrays.asList("a", "b", "c")));
     String exp = on.toString();
     String act = mapper.readTree(new TestBeanToJson().beanToJson()).toString();
     assertEquals(exp, act);
@@ -140,7 +142,6 @@ public class JsonBeanPopulaterTest {
         iter.remove();
       }
     }
-
     String expIgnoreNull = on.toString();
     String actIgnoreNull =
         mapper.readTree(new TestBeanToJson().beanToJson(true)).toString();

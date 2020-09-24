@@ -18,6 +18,9 @@ package com.github.wnameless.json.beanpopulator;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestBeanToJson implements JsonPopulatable {
 
@@ -66,5 +69,8 @@ public class TestBeanToJson implements JsonPopulatable {
   LocalDate date = LocalDate.of(2020, 10, 10);
   @JsonifyStrategy(value = LocalDateStrategy.class, keyName = "dateNil")
   LocalDate dateNull = null;
+
+  @JsonifyStrategy
+  List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c"));
 
 }

@@ -36,7 +36,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonifyStrategy {
 
-  Class<? extends JsonifyStrategyProvider> value();
+  Class<? extends JsonifyStrategyProvider> value() default DefaultJsonifyStrategy.class;
 
   String keyName() default "";
 

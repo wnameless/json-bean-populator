@@ -20,3 +20,6 @@ v0.6.0
 
 v0.6.1
 + Add ignore-null-values feature to JsonPopulatable#beanToJson
+
+v0.6.2
++ Add DefaultJsonifyStrategy to @JsonifyStrategy as default JsonifyStrategyProvider
