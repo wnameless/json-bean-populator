@@ -58,11 +58,14 @@ public class ProductJsonPopulatedValue implements JsonPopulatedValueCustomizer {
 
   @Override
   public Object toValue(String json) {
-    JsonValue js = Json.parse(json);
-    return js.asObject().get("numbers").asObject().get("whole").asArray().get(0)
-        .asLong()
-        * js.asObject().get("numbers").asObject().get("whole").asArray().get(1)
-            .asLong();
+    ObjectNode js;
+    try {
+      js = (ObjectNode) new ObjectMapper().readTree(json);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    return js.get("numbers").get("whole").get(0).asLong()
+        * js.get("numbers").get("whole").get(1).asLong();
   }
 
 }
@@ -75,11 +78,14 @@ public class ProductJsonPopulatedValueWithKeys
 
   @Override
   public Object toValue(String json, String[] keys) {
-    JsonValue js = Json.parse(json);
-    return js.asObject().get("numbers").asObject().get(keys[0]).asArray().get(0)
-        .asLong()
-        * js.asObject().get("numbers").asObject().get(keys[1]).asArray().get(1)
-            .asDouble();
+    ObjectNode js;
+    try {
+      js = (ObjectNode) new ObjectMapper().readTree(json);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+    return js.get("numbers").get(keys[0]).get(0).asLong()
+        * js.get("numbers").get(keys[1]).get(1).asDouble();
   }
 
 }
